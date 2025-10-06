@@ -2,6 +2,7 @@ services:
   - type: web
     name: wholesale-backend
     runtime: node
+    rootDirectory: Backend
     buildCommand: npm run build
     startCommand: npm start
     envVars:
@@ -23,6 +24,7 @@ services:
   - type: web
     name: wholesale-frontend
     runtime: static
+    rootDirectory: Frontend
     buildCommand: npm run build
     staticPublishPath: ./dist
     envVars:
