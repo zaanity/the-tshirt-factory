@@ -1,0 +1,29 @@
+{
+    "name": "The T-Shirt Factory - Premium Wholesale T-Shirts & Bulk Apparel",
+    "short_name": "The T-Shirt Factory",
+    "description": "Your trusted wholesale t-shirt supplier offering premium quality blank and custom t-shirts in bulk. Competitive pricing and fast shipping.",
+    "icons": [
+        {
+            "src": "/favicon-16x16.png",
+            "sizes": "16x16",
+            "type": "image/png"
+        },
+        {
+            "src": "/favicon-32x32.png",
+            "sizes": "32x32",
+            "type": "image/png"
+        },
+        {
+            "src": "/apple-touch-icon.png",
+            "sizes": "180x180",
+            "type": "image/png"
+        }
+    ],
+    "theme_color": "#2d5c4f",
+    "background_color": "#ffffff",
+    "display": "standalone",
+    "orientation": "portrait",
+    "scope": "/",
+    "start_url": "/",
+    "categories": ["shopping", "business", "fashion", "clothing"]
+}

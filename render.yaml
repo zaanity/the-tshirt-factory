@@ -1,0 +1,31 @@
+services:
+  - type: web
+    name: wholesale-backend
+    runtime: node
+    buildCommand: npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: GOOGLE_SHEET_ID
+        fromSecret: google_sheet_id
+      - key: JWT_SECRET
+        fromSecret: jwt_secret
+      - key: FRONTEND_URL
+        fromSecret: frontend_url
+      - key: ADMIN_EMAIL
+        fromSecret: admin_email
+      - key: ADMIN_PASSWORD
+        fromSecret: admin_password
+
+  - type: web
+    name: wholesale-frontend
+    runtime: static
+    buildCommand: npm run build
+    staticPublishPath: ./dist
+    envVars:
+      - key: VITE_API_URL
+        value: https://wholesale-backend.onrender.com/api
+      # Update with actual backend URL after deployment

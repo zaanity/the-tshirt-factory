@@ -1,0 +1,59 @@
+.product-detail-container {
+  display: flex;
+  gap: 3em;
+  flex-wrap: wrap;
+}
+.product-detail-images {
+  flex: 1.2;
+  min-width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2em;
+}
+.product-detail-images img {
+  width: 100%;
+  max-width: 420px;
+  border-radius: var(--radius);
+  box-shadow: 0 6px 32px rgba(33,87,76,0.07);
+}
+.product-detail-info {
+  flex: 1;
+  min-width: 260px;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+.product-detail-title {
+  font-size: 2.1rem;
+}
+.product-detail-meta {
+  color: var(--color-muted);
+  font-size: 1.1rem;
+  margin-bottom: 0.5em;
+  display: flex;
+  gap: 1.8em;
+}
+.product-detail-desc {
+  font-size: 1.1rem;
+  margin-bottom: 1em;
+}
+.product-detail-fabric, .product-detail-sizes, .product-detail-colors {
+  font-size: 1.05rem;
+  margin-bottom: 0.3em;
+}
+.product-detail-pricing ul {
+  list-style: none;
+  padding: 0;
+  margin: 0.4em 0;
+}
+.product-detail-pricing li {
+  font-size: 1.08rem;
+  margin-bottom: 0.15em;
+}
+.enquiry-btn {
+  margin-top: 2em;
+  width: fit-content;
+}
+@media (max-width: 900px) {
+  .product-detail-container { flex-direction: column; gap: 2em; }
+}

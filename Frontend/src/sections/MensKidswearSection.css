@@ -1,0 +1,45 @@
+.mens-kidswear-section {
+  padding: 4rem 0;
+  background-color: var(--color-bg-alt);
+  text-align: center;
+}
+
+.mens-kidswear-section .container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.mens-kidswear-section h2 {
+  font-size: var(--text-3xl);
+  margin-bottom: 2rem;
+  color: var(--color-text);
+}
+
+.categories {
+  display: flex;
+  justify-content: center;
+  gap: 4rem;
+}
+
+.category {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.category-icon {
+  font-size: 4rem;
+  color: var(--accent-emerald);
+  margin-bottom: 1rem;
+}
+
+.category h3 {
+  font-size: var(--text-xl);
+  color: var(--color-text);
+}
+
+.category:hover {
+  color: var(--accent-gold);
+}

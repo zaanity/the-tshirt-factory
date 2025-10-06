@@ -1,0 +1,40 @@
+.enquiry-form {
+  max-width: 520px;
+  margin: 2em auto;
+  background: var(--color-card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+  padding: 2.2em 1.6em;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2em;
+}
+.enquiry-form h1 {
+  margin-bottom: 1em;
+}
+.enquiry-form label {
+  font-weight: 500;
+  margin-bottom: 0.3em;
+  display: block;
+}
+.enquiry-products {
+  margin-top: 1.5em;
+}
+.enquiry-product-row {
+  display: flex;
+  align-items: center;
+  gap: 1.2em;
+  margin-bottom: 0.8em;
+}
+.enquiry-product-row input[type="number"] {
+  width: 90px;
+}
+.enquiry-btn {
+  width: 100%;
+  margin-top: 1.5em;
+}
+.enquiry-success {
+  margin: 5em auto;
+  text-align: center;
+  max-width: 420px;
+}

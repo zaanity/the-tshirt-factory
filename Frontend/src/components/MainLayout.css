@@ -1,0 +1,237 @@
+.main-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  background: var(--color-card);
+  border-bottom: 1px solid var(--color-border);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  box-shadow: var(--shadow-sm);
+}
+
+.header .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-4) 0;
+}
+
+.logo {
+  font-family: var(--font-heading);
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  color: var(--accent-emerald);
+  letter-spacing: -0.025em;
+  transition: color var(--transition-fast);
+}
+
+.logo:hover {
+  color: var(--accent-emerald);
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+}
+
+.nav-link {
+  font-size: var(--text-base);
+  font-weight: 500;
+  color: var(--color-text);
+  transition: color var(--transition-fast);
+  position: relative;
+}
+
+.nav-link:hover {
+  color: var(--accent-emerald);
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--accent-emerald);
+  transition: width var(--transition-fast);
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+.main {
+  flex: 1;
+  padding: var(--space-12) 0;
+}
+
+.footer {
+  background: var(--color-bg-alt);
+  border-top: 1px solid var(--color-border);
+  padding: var(--space-12) 0 var(--space-8) 0;
+}
+
+.footer-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--space-8);
+  margin-bottom: var(--space-8);
+}
+
+.footer-section h4 {
+  font-size: var(--text-lg);
+  font-weight: 600;
+  margin-bottom: var(--space-3);
+  color: var(--color-text);
+}
+
+.footer-section p {
+  color: var(--color-muted);
+  line-height: var(--leading-relaxed);
+  margin-bottom: var(--space-2);
+}
+
+.footer-section ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-section li {
+  margin-bottom: var(--space-2);
+}
+
+.footer-section a {
+  color: var(--color-muted);
+  transition: color var(--transition-fast);
+}
+
+.footer-section a:hover {
+  color: var(--accent-emerald);
+}
+
+.footer-bottom {
+  border-top: 1px solid var(--color-border);
+  padding-top: var(--space-4);
+  text-align: center;
+}
+
+.footer-bottom p {
+  color: var(--color-muted);
+  font-size: var(--text-sm);
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .header .container {
+    padding: var(--space-3) 0;
+    position: relative;
+    justify-content: center;
+  }
+
+  .logo {
+    font-size: var(--text-xl);
+  }
+
+  .nav {
+    display: none;
+  }
+
+  .hamburger {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 24px;
+    height: 24px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 20;
+    position: absolute;
+    right: var(--space-3);
+    top: 30%;
+    /* transform: translateY(-50%); */
+  }
+}
+
+@media (min-width: 769px) {
+  .hamburger {
+    display: none;
+  }
+}
+
+.hamburger-line {
+  width: 24px;
+  height: 2px;
+  background-color: var(--accent-emerald);
+  border-radius: 2px;
+  transition: all 0.3s linear;
+  transform-origin: center;
+}
+
+  .hamburger.open .hamburger-line:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 10px);
+  }
+
+  .hamburger.open .hamburger-line:nth-child(2) {
+    opacity: 0;
+  }
+
+  .hamburger.open .hamburger-line:nth-child(3) {
+    transform: rotate(-45deg) translate(5px, -10px);
+  }
+
+  .mobile-menu-overlay {
+    position: fixed;
+    top: 56px; /* height of header */
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 15;
+  }
+
+  .hamburger:focus {
+    outline: none;
+    background: transparent;
+  }
+
+.mobile-nav {
+  background: var(--color-card);
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-4);
+  gap: var(--space-4);
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.mobile-nav-link {
+  font-size: var(--text-lg);
+  font-weight: 600;
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.mobile-nav-link:hover {
+  color: var(--accent-emerald);
+}
+
+.main {
+  padding: var(--space-8) 0;
+}
+
+.footer {
+  padding: var(--space-8) 0 var(--space-4) 0;
+}
+
+.footer-content {
+  grid-template-columns: 1fr;
+  gap: var(--space-6);
+}

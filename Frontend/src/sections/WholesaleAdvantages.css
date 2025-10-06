@@ -1,0 +1,120 @@
+.advantages-section {
+  padding: var(--space-16) 0;
+  background: var(--color-bg-alt);
+}
+
+.advantages-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--space-8);
+  align-items: start;
+}
+
+.advantage-card {
+  background: var(--color-card);
+  border-radius: var(--radius-lg);
+  padding: var(--space-8);
+  box-shadow: var(--shadow-card);
+  transition: all var(--transition);
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+}
+
+.advantage-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--accent-emerald), var(--accent-gold));
+  transform: scaleX(0);
+  transition: transform var(--transition);
+}
+
+.advantage-card:hover::before {
+  transform: scaleX(1);
+}
+
+.advantage-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-xl);
+  border-color: var(--accent-emerald);
+}
+
+.advantage-icon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto var(--space-6) auto;
+  color: var(--accent-emerald);
+  transition: color var(--transition), transform var(--transition);
+}
+
+.advantage-card:hover .advantage-icon {
+  color: var(--accent-gold);
+  transform: scale(1.1);
+}
+
+.advantage-content {
+  text-align: center;
+}
+
+.advantage-title {
+  font-size: var(--text-xl);
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: var(--space-3);
+  letter-spacing: -0.025em;
+}
+
+.advantage-desc {
+  font-size: var(--text-base);
+  color: var(--color-muted);
+  line-height: var(--leading-relaxed);
+  margin: 0;
+}
+
+.advantage-number {
+  position: absolute;
+  top: var(--space-4);
+  right: var(--space-4);
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  color: var(--accent-blush);
+  opacity: 0.3;
+  font-family: var(--font-heading);
+}
+
+@media (max-width: 768px) {
+  .advantages-section {
+    padding: var(--space-12) 0;
+  }
+
+  .advantages-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+
+  .advantage-card {
+    padding: var(--space-6);
+  }
+
+  .advantage-icon {
+    width: 48px;
+    height: 48px;
+    margin-bottom: var(--space-4);
+  }
+
+  .advantage-title {
+    font-size: var(--text-lg);
+  }
+
+  .advantage-desc {
+    font-size: var(--text-sm);
+  }
+
+  .advantage-number {
+    font-size: var(--text-xl);
+  }
+}
