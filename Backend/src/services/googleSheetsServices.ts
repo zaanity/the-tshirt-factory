@@ -1,20 +1,57 @@
+// Frontend: no — this is Backend/services/googleSheetsServices.ts
 import { google } from "googleapis";
 import { JWT } from "google-auth-library";
-import fs from "fs";
-import path from "path";
 
-const SHEET_ID = process.env.GOOGLE_SHEET_ID!;
-const CREDENTIALS_PATH = path.join(process.cwd(), "credentials.json");
+const SHEET_ID = process.env.GOOGLE_SHEET_ID;
+if (!SHEET_ID) {
+  throw new Error("Missing required env var: GOOGLE_SHEET_ID");
+}
 
 const SCOPES = ["https://www.googleapis.com/auth/spreadsheets"];
-const credentials = JSON.parse(fs.readFileSync(CREDENTIALS_PATH, "utf-8"));
 
-const client = new google.auth.JWT({
-  email: credentials.client_email,
-  key: credentials.private_key,
-  scopes: SCOPES,
-});
+function getCredentialsFromEnv(): { client_email: string; private_key: string } {
+  const raw = process.env.GOOGLE_SERVICE_ACCOUNT_JSON;
+  if (!raw) {
+    throw new Error(
+      "Missing GOOGLE_SERVICE_ACCOUNT_JSON environment variable. Set it to the service account JSON."
+    );
+  }
 
+  let parsed: any;
+  try {
+    parsed = JSON.parse(raw);
+  } catch (err) {
+    // Some CI/UI copy/pastes replace newlines — try to unescape common newline escapes
+    try {
+      const maybeFixed = raw.replace(/\\n/g, "\n");
+      parsed = JSON.parse(maybeFixed);
+    } catch (err2) {
+      console.error("Failed to parse GOOGLE_SERVICE_ACCOUNT_JSON:", err2);
+      throw new Error("Invalid GOOGLE_SERVICE_ACCOUNT_JSON JSON format");
+    }
+  }
+
+  if (!parsed.client_email || !parsed.private_key) {
+    throw new Error(
+      "GOOGLE_SERVICE_ACCOUNT_JSON is missing required fields (client_email/private_key)"
+    );
+  }
+
+  return { client_email: parsed.client_email, private_key: parsed.private_key };
+}
+
+// Create a JWT client using credentials from env (no disk access)
+function createJwtClient() {
+  const creds = getCredentialsFromEnv();
+  const client = new google.auth.JWT({
+    email: creds.client_email,
+    key: creds.private_key,
+    scopes: SCOPES,
+  });
+  return client;
+}
+
+const client = createJwtClient();
 const sheets = google.sheets({ version: "v4", auth: client });
 
 // ✅ Fetch all rows from a sheet
@@ -23,7 +60,7 @@ export async function getSheetRows(sheetName: string) {
     await client.authorize();
     console.log(`Fetching data from sheet: ${sheetName}`);
     const res = await sheets.spreadsheets.values.get({
-      spreadsheetId: SHEET_ID,
+      spreadsheetId: SHEET_ID!,
       range: `${sheetName}!A1:Z1000`,
     });
     const rows = res.data.values || [];
@@ -35,7 +72,11 @@ export async function getSheetRows(sheetName: string) {
     );
   } catch (error) {
     console.error(`Error fetching data from sheet ${sheetName}:`, error);
-    throw new Error(`Failed to fetch data from Google Sheets: ${error instanceof Error ? error.message : String(error)}`);
+    throw new Error(
+      `Failed to fetch data from Google Sheets: ${
+        error instanceof Error ? error.message : String(error)
+      }`
+    );
   }
 }
 
@@ -43,7 +84,7 @@ export async function getSheetRows(sheetName: string) {
 export async function appendSheetRow(sheetName: string, row: string[]) {
   await client.authorize();
   await sheets.spreadsheets.values.append({
-    spreadsheetId: SHEET_ID,
+    spreadsheetId: SHEET_ID!,
     range: `${sheetName}!A1`,
     valueInputOption: "USER_ENTERED",
     requestBody: { values: [row] },
@@ -51,10 +92,14 @@ export async function appendSheetRow(sheetName: string, row: string[]) {
 }
 
 // ✅ Update row (rowIndex includes header row)
-export async function updateSheetRow(sheetName: string, rowIndex: number, row: string[]) {
+export async function updateSheetRow(
+  sheetName: string,
+  rowIndex: number,
+  row: string[]
+) {
   await client.authorize();
   await sheets.spreadsheets.values.update({
-    spreadsheetId: SHEET_ID,
+    spreadsheetId: SHEET_ID!,
     range: `${sheetName}!A${rowIndex + 1}`, // rowIndex=0 is header
     valueInputOption: "USER_ENTERED",
     requestBody: { values: [row] },
@@ -65,7 +110,7 @@ export async function updateSheetRow(sheetName: string, rowIndex: number, row: s
 export async function deleteSheetRow(sheetName: string, rowIndex: number) {
   await client.authorize();
   await sheets.spreadsheets.batchUpdate({
-    spreadsheetId: SHEET_ID,
+    spreadsheetId: SHEET_ID!,
     requestBody: {
       requests: [
         {
@@ -73,7 +118,7 @@ export async function deleteSheetRow(sheetName: string, rowIndex: number) {
             range: {
               sheetId: await getSheetId(sheetName),
               dimension: "ROWS",
-              startIndex: rowIndex,     // includes header
+              startIndex: rowIndex, // includes header
               endIndex: rowIndex + 1,
             },
           },
@@ -86,7 +131,7 @@ export async function deleteSheetRow(sheetName: string, rowIndex: number) {
 // Helper to get Google sheetId
 async function getSheetId(sheetName: string): Promise<number> {
   await client.authorize();
-  const res = await sheets.spreadsheets.get({ spreadsheetId: SHEET_ID });
+  const res = await sheets.spreadsheets.get({ spreadsheetId: SHEET_ID! });
   const sheet = res.data.sheets?.find(
     (s) => s.properties?.title === sheetName
   );
