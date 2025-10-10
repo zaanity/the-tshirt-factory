@@ -43,7 +43,8 @@ export function useAuth() {
   const navigate = useNavigate();
 
   async function login(username: string, password: string): Promise<LoginResp> {
-    const res = await fetch("/api/admin/login", {
+    const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000/api";
+    const res = await fetch(`${API_URL}/admin/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, password }),

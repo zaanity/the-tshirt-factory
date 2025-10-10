@@ -20,7 +20,8 @@ const InitialPopup: React.FC<Props> = ({ onClose }) => {
     window.localStorage.setItem("popupSubmitted", "true");
 
     // Optionally, POST to backend
-    await fetch("/api/contacts", {
+    const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000/api";
+    await fetch(`${API_URL}/contacts`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name, contact }),

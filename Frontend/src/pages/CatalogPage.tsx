@@ -26,7 +26,8 @@ const CatalogPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
-    fetch("https://the-tshirt-factory-admin.onrender.com/api/products")
+    const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000/api";
+    fetch(`${API_URL}/products`)
       .then(r => {
         if (!r.ok) throw new Error(`Failed to fetch products: ${r.status} ${r.statusText}`);
         return r.json();

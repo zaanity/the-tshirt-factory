@@ -21,7 +21,8 @@ const ProductPage: React.FC = () => {
   const [product, setProduct] = useState<Product | null>(null);
 
   useEffect(() => {
-    fetch(`/api/products/${id}`)
+    const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000/api";
+    fetch(`${API_URL}/products/${id}`)
       .then(r => r.json())
       .then(setProduct);
   }, [id]);
