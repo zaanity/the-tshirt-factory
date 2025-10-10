@@ -29,5 +29,5 @@ services:
     staticPublishPath: ./dist
     envVars:
       - key: VITE_API_URL
-        value: https://the-tshirt-factory-admin.onrender.com/admin
-      # Update with actual backend URL after deployment
+        value: https://the-tshirt-factory-admin.onrender.com/api
+      # Backend URL for production
