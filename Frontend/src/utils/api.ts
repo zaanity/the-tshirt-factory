@@ -1,4 +1,4 @@
-const API_URL = (import.meta as any).env.VITE_API_URL || "http://localhost:4000/api";
+const API_URL = (import.meta as any).env.VITE_API_URL || "https://the-tshirt-factory-admin.onrender.com/api";
 // Helper to get auth token for admin routes
 function getToken() {
   return localStorage.getItem("token");

@@ -26,7 +26,7 @@ const CatalogPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
-    fetch("http://localhost:4000/api/products")
+    fetch("https://the-tshirt-factory-admin.onrender.com/api/products")
       .then(r => {
         if (!r.ok) throw new Error(`Failed to fetch products: ${r.status} ${r.statusText}`);
         return r.json();
