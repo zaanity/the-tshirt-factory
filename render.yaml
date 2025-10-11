@@ -23,10 +23,10 @@ services:
 
   - type: web
     name: wholesale-frontend
-    runtime: static
+    runtime: node
     rootDirectory: Frontend
     buildCommand: npm run build
-    staticPublishPath: ./dist
+    startCommand: npm start
     envVars:
       - key: VITE_API_URL
         value: https://the-tshirt-factory-admin.onrender.com/api

@@ -66,7 +66,7 @@ const ProductCard: React.FC<Props> = ({ product }) => {
         onMouseLeave={() => setIsHovered(false)}
       >
         <img
-          src={images[currentImageIndex]}
+          src={images[currentImageIndex].startsWith('http') ? images[currentImageIndex] : `/assets/${images[currentImageIndex]}`}
           alt={product.name}
           className="product-img fade-in"
           key={currentImageIndex}
@@ -198,7 +198,7 @@ const ProductCard: React.FC<Props> = ({ product }) => {
             onClick={(e) => e.stopPropagation()}
           >
             <img
-              src={images[modalImageIndex]}
+              src={images[modalImageIndex].startsWith('http') ? images[modalImageIndex] : `/assets/${images[modalImageIndex]}`}
               alt={product.name}
               style={{
                 maxWidth: "100%",
