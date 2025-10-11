@@ -127,7 +127,7 @@
 
 @media (max-width: 768px) {
   .hero-section {
-    min-height: 70vh;
+    min-height: 60vh;
     text-align: center;
   }
 
@@ -163,9 +163,11 @@
     align-items: center;
   }
 
-  /* Reduce video quality on mobile for better performance */
+  /* Adjust video to show complete on mobile */
   .hero-video {
     filter: brightness(0.8) saturate(1.0) contrast(1.0);
+    object-fit:fill;
+    object-position: center;
   }
 }
 
