@@ -27,10 +27,18 @@
   color: var(--accent-emerald);
   letter-spacing: -0.025em;
   transition: color var(--transition-fast);
+  display: flex;
+  align-items: center;
 }
 
 .logo:hover {
   color: var(--accent-emerald);
+}
+
+.logo-video {
+  height: 40px;
+  width: auto;
+  object-fit: contain;
 }
 
 .nav {

@@ -15,7 +15,14 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       <header className="header">
         <div className="container">
           <Link className="logo" to="/" onClick={closeMenu}>
-            The T-Shirt Factory
+            <video
+              src="/assets/Video_Conversion_to_Portrait_Ratio.mp4"
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="logo-video"
+            />
           </Link>
           <nav className="nav">
             <Link to="/catalog" className="nav-link">Catalog</Link>
