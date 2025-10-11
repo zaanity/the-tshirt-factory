@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const API_URL = (import.meta as any).env.VITE_API_URL || "https://the-tshirt-factory-admin.onrender.com/api";
 // Helper to get auth token for admin routes
 function getToken() {
@@ -16,6 +17,7 @@ export async function fetchProducts() {
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function addProduct(product: any) {
   const res = await fetch(`${API_URL}/products`, {
     method: "POST",
@@ -29,6 +31,7 @@ export async function addProduct(product: any) {
   return res.json();
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function updateProduct(id: string, updates: any) {
   const res = await fetch(`${API_URL}/products/${id}`, {
     method: "PUT",

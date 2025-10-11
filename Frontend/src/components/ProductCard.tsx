@@ -70,6 +70,7 @@ const ProductCard: React.FC<Props> = ({ product }) => {
           alt={product.name}
           className="product-img fade-in"
           key={currentImageIndex}
+          loading="lazy"
           onClick={(e) => {
             e.preventDefault();
             setModalImageIndex(currentImageIndex);

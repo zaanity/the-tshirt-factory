@@ -72,12 +72,40 @@ function fromRow(row: any): any {
   return { ...row, images, image: images[0] || "", sizesAvailable }; // Keep image for backward compatibility
 }
 
-export const getAllProducts = async (_: Request, res: Response) => {
+export const getAllProducts = async (req: Request, res: Response) => {
   try {
     const data = await getSheetRows(SHEET_NAME);
-    const normalized = data.map(fromRow);
+    let normalized = data.map(fromRow);
     console.log(`Fetched ${normalized.length} products successfully`);
-    res.json(normalized);
+
+    // Server-side filtering
+    const category = req.query.category as string;
+    const search = req.query.search as string;
+
+    if (category && category !== 'all') {
+      normalized = normalized.filter(product => product.category === category);
+    }
+
+    if (search) {
+      const searchLower = search.toLowerCase();
+      normalized = normalized.filter(product => 
+        product.name.toLowerCase().includes(searchLower)
+      );
+    }
+
+    // Pagination
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 20; // Default 20 per page
+    const offset = (page - 1) * limit;
+    const paginatedProducts = normalized.slice(offset, offset + limit);
+
+    res.json({
+      products: paginatedProducts,
+      total: normalized.length,
+      page,
+      limit,
+      totalPages: Math.ceil(normalized.length / limit)
+    });
   } catch (e) {
     console.error("getAllProducts error:", e);
     res.status(500).json({ error: "Failed to fetch products", details: e instanceof Error ? e.message : String(e) });

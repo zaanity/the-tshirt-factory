@@ -49,6 +49,7 @@ const AdminLogin: React.FC = () => {
       // on success, go to dashboard
       navigate("/admin");
     } catch (err: any) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       setError(err.message || "Login failed");
     }
   };

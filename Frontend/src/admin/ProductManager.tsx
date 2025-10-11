@@ -60,6 +60,7 @@ export default function ProductManager() {
       setProducts(Array.isArray(data) ? data : []);
       console.log(`Successfully loaded ${Array.isArray(data) ? data.length : 0} products`);
     } catch (err: any) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       console.error("fetchProducts error:", err);
       setError(err.message || "Failed to load products");
     } finally {
@@ -92,6 +93,7 @@ export default function ProductManager() {
     const images = Array.isArray(p.images) ? p.images : (p.image ? p.image.split(',').map(url => url.trim()) : []);
 
     // Convert sizesAvailable array to individual size fields
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const sizeFields: any = { size1: "", size2: "", size3: "", size4: "", size5: "" };
     if (Array.isArray(p.sizesAvailable)) {
       p.sizesAvailable.forEach((size, index) => {
@@ -165,6 +167,7 @@ export default function ProductManager() {
       if (!res.ok) throw new Error(await res.text());
       await fetchProducts();
     } catch (err: any) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       console.error("deleteProduct error:", err);
       setError(err.message || "Failed to delete product");
     }

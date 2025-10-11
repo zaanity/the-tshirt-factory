@@ -9,6 +9,7 @@ const InitialPopup: React.FC<Props> = ({ onClose }) => {
   const [name, setName] = useState("");
   const [contact, setContact] = useState("");
   const [error, setError] = useState("");
+  const [isFading, setIsFading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,11 +28,17 @@ const InitialPopup: React.FC<Props> = ({ onClose }) => {
       body: JSON.stringify({ name, contact }),
     });
 
-    onClose();
+    setIsFading(true);
+  };
+
+  const handleAnimationEnd = () => {
+    if (isFading) {
+      onClose();
+    }
   };
 
   return (
-    <div className="popup-overlay">
+    <div className={`popup-overlay ${isFading ? 'fade-out' : ''}`} onAnimationEnd={handleAnimationEnd}>
       <form className="popup-modal" onSubmit={handleSubmit}>
         <h2>Welcome to The T-Shirt Factory</h2>
         <p>Please enter your details to access our wholesale collection.</p>
@@ -48,7 +55,7 @@ const InitialPopup: React.FC<Props> = ({ onClose }) => {
           className="popup-input"
         />
         {error && <div className="popup-error">{error}</div>}
-        <button className="popup-btn" type="submit">
+        <button className="popup-btn" type="submit" disabled={isFading}>
           Enter
         </button>
       </form>

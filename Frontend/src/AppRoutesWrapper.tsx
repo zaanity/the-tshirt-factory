@@ -13,7 +13,7 @@ import AdminDashboard from "./admin/AdminDashboard";
 
 import { useAuth } from "./hooks/useAuth";
 
-export default function AppRoutesWrapper({}: { onClosePopup?: () => void }) {
+export default function AppRoutesWrapper() {
   // safe to use router hooks in useAuth here — this component is rendered inside <Router>
   const auth = useAuth();
 
