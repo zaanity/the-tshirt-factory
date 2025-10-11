@@ -15,7 +15,12 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       <header className="header">
         <div className="container">
           <Link className="logo" to="/" onClick={closeMenu}>
-            <img src="/assets/favicon.png" alt="The T-Shirt Factory" />
+            <img
+              src="/assets/favicon.png"
+              alt="The T-Shirt Factory Logo"
+              className="logo-image"
+            />
+            <span className="logo-text">The T-Shirt Factory</span>
           </Link>
           <nav className="nav">
             <Link to="/catalog" className="nav-link">Catalog</Link>

@@ -35,10 +35,19 @@
   color: var(--accent-emerald);
 }
 
-.logo-video {
+.logo-image {
   height: 40px;
   width: auto;
   object-fit: contain;
+  margin-right: var(--space-2);
+}
+
+.logo-text {
+  font-family: var(--font-heading);
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  color: var(--accent-emerald);
+  letter-spacing: -0.025em;
 }
 
 .nav {
@@ -145,6 +154,14 @@
 
   .logo {
     font-size: var(--text-xl);
+  }
+
+  .logo-text {
+    font-size: var(--text-xl);
+  }
+
+  .logo-image {
+    height: 32px;
   }
 
   .nav {
