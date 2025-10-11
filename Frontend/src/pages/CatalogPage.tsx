@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 import ProductCard from "../components/ProductCard";
 import MainLayout from "../components/MainLayout";
 import "./CatalogPage.css";
@@ -24,8 +25,6 @@ const CatalogPage: React.FC = () => {
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
 
   const navigate = useNavigate();
@@ -33,43 +32,41 @@ const CatalogPage: React.FC = () => {
 
   const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000/api";
 
-  const fetchProducts = async (currentPage: number, currentCategory: string, currentSearch: string) => {
-    setLoading(true);
+  const fetchProductsQuery = async ({ queryKey }: { queryKey: [string, number, string, string] }) => {
+    const [, currentPage, currentCategory, currentSearch] = queryKey;
     const params = new URLSearchParams({
       page: currentPage.toString(),
       limit: '20',
       ...(currentCategory !== 'all' && { category: currentCategory }),
       ...(currentSearch && { search: currentSearch }),
     });
-    try {
-      const response = await fetch(`${API_URL}/products?${params}`);
-      if (!response.ok) throw new Error(`Failed to fetch: ${response.status}`);
-      const data = await response.json();
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const transformed = data.products.map((product: any) => ({
-        ...product,
-        priceTiers: product.price ? [{ minQty: 1, price: parseFloat(product.price) }] : [],
-        images: product.images || (product.image ? [product.image] : []),
-      }));
-      setCurrentProducts(transformed);
+    const response = await fetch(`${API_URL}/products?${params}`);
+    if (!response.ok) throw new Error(`Failed to fetch: ${response.status}`);
+    const data = await response.json();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const transformed = data.products.map((product: any) => ({
+      ...product,
+      priceTiers: product.price ? [{ minQty: 1, price: parseFloat(product.price) }] : [],
+      images: product.images || (product.image ? [product.image] : []),
+    }));
+    return { products: transformed, total: data.total, page: data.page, totalPages: data.totalPages };
+  };
+
+  const { data, isLoading, error: queryError } = useQuery({
+    queryKey: ['products', page, selectedCategory, searchTerm],
+    queryFn: fetchProductsQuery,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  });
+
+  useEffect(() => {
+    if (data) {
+      setCurrentProducts(data.products);
       setTotal(data.total);
       setPage(data.page);
       setTotalPages(data.totalPages);
-      setLoading(false);
-    } catch (err) {
-      console.error("Error fetching products:", err);
-      setError((err as Error).message || "An error occurred while loading products");
-      setLoading(false);
     }
-  };
+  }, [data]);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => {
-    fetchProducts(1, selectedCategory, searchTerm);
-    setPage(1);
-  }, [selectedCategory, searchTerm]);
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     const currentCategory = queryParams.get("category") || 'all';
     setSelectedCategory(currentCategory);
@@ -87,7 +84,6 @@ const CatalogPage: React.FC = () => {
 
   const handlePageChange = (newPage: number) => {
     setPage(newPage);
-    fetchProducts(newPage, selectedCategory, searchTerm);
   };
 
   return (
@@ -146,19 +142,19 @@ const CatalogPage: React.FC = () => {
 
       <div className="catalog-content">
         <div className="container">
-          {loading ? (
+          {isLoading ? (
             <div className="loading-state">
               <div className="loading-spinner"></div>
               <p>Loading products...</p>
             </div>
-          ) : error ? (
+          ) : queryError ? (
             <div className="empty-state">
               <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
                 <circle cx="12" cy="12" r="10"/>
                 <path d="M16 16l-4-4m0 0L8 8m4 4l4-4m-4 4L8 16"/>
               </svg>
               <h3>Error loading products</h3>
-              <p>{error}</p>
+              <p>{queryError.message}</p>
             </div>
           ) : currentProducts.length === 0 ? (
             <div className="empty-state">

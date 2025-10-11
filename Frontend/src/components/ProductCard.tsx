@@ -13,7 +13,7 @@ type Props = {
   };
 };
 
-const ProductCard: React.FC<Props> = ({ product }) => {
+const ProductCard: React.FC<Props> = React.memo(({ product }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -321,6 +321,6 @@ const ProductCard: React.FC<Props> = ({ product }) => {
       )}
     </div>
   );
-};
+});
 
 export default ProductCard;
