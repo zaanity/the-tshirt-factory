@@ -30,6 +30,35 @@
   flex-wrap: wrap;
 }
 
+.category-filters {
+  display: flex;
+  gap: var(--space-2);
+  align-items: center;
+}
+
+.filter-btn {
+  padding: var(--space-2) var(--space-4);
+  border: 2px solid var(--color-border);
+  background: var(--color-card);
+  color: var(--color-text);
+  border-radius: var(--radius);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  outline: none;
+}
+
+.filter-btn:hover {
+  border-color: var(--accent-emerald);
+}
+
+.filter-btn.active {
+  background: var(--accent-emerald);
+  color: white;
+  border-color: var(--accent-emerald);
+}
+
 .search-bar {
   position: relative;
   flex: 1;

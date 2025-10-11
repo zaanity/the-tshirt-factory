@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import ProductCard from "../components/ProductCard";
 import MainLayout from "../components/MainLayout";
 import "./CatalogPage.css";
@@ -24,6 +24,9 @@ const CatalogPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
+
+  const navigate = useNavigate();
+  const [selectedCategory, setSelectedCategory] = useState(category || 'all');
 
   useEffect(() => {
     const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000/api";
@@ -50,13 +53,27 @@ const CatalogPage: React.FC = () => {
       });
   }, []);
 
+  useEffect(() => {
+    const currentCategory = queryParams.get("category") || 'all';
+    setSelectedCategory(currentCategory);
+  }, [location.search]);
+
+  const handleCategoryFilter = (cat: string) => {
+    setSelectedCategory(cat);
+    if (cat === 'all') {
+      navigate('/catalog');
+    } else {
+      navigate(`/catalog?category=${cat}`);
+    }
+  };
+
   const filteredProducts = products.filter(product => {
     const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase());
     if (!matchesSearch) return false;
 
-    if (category === "menswear") {
+    if (selectedCategory === "menswear") {
       return product.category === "menswear";
-    } else if (category === "kidswear") {
+    } else if (selectedCategory === "kidswear") {
       return product.category === "kidswear";
     }
     return true;
@@ -84,6 +101,27 @@ const CatalogPage: React.FC = () => {
                 <circle cx="11" cy="11" r="8"/>
                 <path d="M21 21l-4.35-4.35"/>
               </svg>
+            </div>
+
+            <div className="category-filters">
+              <button
+                className={`filter-btn ${selectedCategory === 'all' ? 'active' : ''}`}
+                onClick={() => handleCategoryFilter('all')}
+              >
+                All
+              </button>
+              <button
+                className={`filter-btn ${selectedCategory === 'menswear' ? 'active' : ''}`}
+                onClick={() => handleCategoryFilter('menswear')}
+              >
+                Menswear
+              </button>
+              <button
+                className={`filter-btn ${selectedCategory === 'kidswear' ? 'active' : ''}`}
+                onClick={() => handleCategoryFilter('kidswear')}
+              >
+                Kidswear
+              </button>
             </div>
 
             <div className="catalog-stats">
