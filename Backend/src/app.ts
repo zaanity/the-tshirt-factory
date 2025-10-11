@@ -14,6 +14,7 @@ const corsOptions = {
     "http://localhost:5173", // Vite dev server
     "http://localhost:3000", // Alternative dev port
     "http://localhost:4000", // Same origin
+    "https://the-tshirt-factory-store.onrender.com",
     ...(process.env.FRONTEND_URL ? [process.env.FRONTEND_URL] : [])
   ],
   credentials: true,
