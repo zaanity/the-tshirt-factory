@@ -57,8 +57,8 @@ export default function ProductManager() {
         throw new Error(`Failed to fetch products: ${res.status} ${res.statusText} - ${errorText}`);
       }
       const data = await res.json();
-      setProducts(Array.isArray(data) ? data : []);
-      console.log(`Successfully loaded ${Array.isArray(data) ? data.length : 0} products`);
+      setProducts(Array.isArray(data.products) ? data.products : []);
+      console.log(`Successfully loaded ${Array.isArray(data.products) ? data.products.length : 0} products`);
     } catch (err: any) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       console.error("fetchProducts error:", err);
