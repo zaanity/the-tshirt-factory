@@ -21,7 +21,9 @@ const ImageUploader: React.FC = () => {
         const formData = new FormData();
         formData.append("images", file);
 
-        const response = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:4000"}/api/upload/images`, {
+        const baseUrl = import.meta.env.VITE_API_URL || "http://localhost:4000";
+        const apiUrl = baseUrl.endsWith('/api') ? baseUrl : `${baseUrl}/api`;
+        const response = await fetch(`${apiUrl}/upload/images`, {
           method: "POST",
           headers: {
             Authorization: `Bearer ${token}`,
