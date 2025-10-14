@@ -5,6 +5,7 @@ import productRoutes from "./routes/productRoutes";
 import visitorRoutes from "./routes/visitorRoutes";
 import userRoutes from "./routes/userRoutes";
 import contactsRoutes from "./routes/contactsRoutes";
+import uploadRoutes from "./routes/uploadRoutes";
 
 const app = express();
 
@@ -35,6 +36,7 @@ app.use("/api/products", productRoutes);
 app.use("/api/visitors", visitorRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/contacts", contactsRoutes);
+app.use("/api/upload", uploadRoutes);
 
 app.get("/", (_req, res) => {
   res.send("Wholesale Backend with Google Sheets DB");

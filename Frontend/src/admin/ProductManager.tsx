@@ -41,6 +41,8 @@ export default function ProductManager() {
     size5: "",
   });
 
+  const [uploadingImages, setUploadingImages] = useState(false);
+
   useEffect(() => {
     fetchProducts();
   }, []);
@@ -373,33 +375,140 @@ export default function ProductManager() {
               </div>
             </div>
 
-            {/* Image URL inputs */}
+            {/* Image Upload */}
             <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
               <label style={{ fontWeight: "bold", fontSize: "0.9rem" }}>Product Images (up to 5)</label>
-              {[0, 1, 2, 3, 4].map((index) => (
+
+              {/* File Upload */}
+              <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
                 <input
-                  key={index}
-                  type="url"
-                  placeholder={`Image ${index + 1} URL`}
-                  value={form.images && Array.isArray(form.images) && form.images[index] ? form.images[index] : ""}
-                  onChange={(e) => {
-                    const newImages = [...(Array.isArray(form.images) ? form.images : [])];
-                    newImages[index] = e.target.value.trim();
-                    // Remove empty strings at the end
-                    while (newImages.length > 0 && !newImages[newImages.length - 1]) {
-                      newImages.pop();
-                    }
-                    handleChange("images", newImages);
-                    // Update the main image field with the first image
-                    if (newImages.length > 0 && newImages[0]) {
-                      handleChange("image", newImages[0]);
-                    } else {
-                      handleChange("image", "");
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  onChange={async (e) => {
+                    const files = Array.from(e.target.files || []);
+                    if (files.length === 0) return;
+
+                    setUploadingImages(true);
+                    try {
+                      const formData = new FormData();
+                      files.forEach((file) => {
+                        formData.append("images", file);
+                      });
+
+                      const uploadRes = await fetch(`${(import.meta as any).env.VITE_API_URL || "http://localhost:4000"}/api/upload/images`, {
+                        method: "POST",
+                        headers: {
+                          Authorization: `Bearer ${token}`,
+                        },
+                        body: formData,
+                      });
+
+                      if (!uploadRes.ok) {
+                        throw new Error("Failed to upload images");
+                      }
+
+                      const uploadData = await uploadRes.json();
+                      const currentImages = Array.isArray(form.images) ? form.images : [];
+                      const newImages = [...currentImages, ...uploadData.urls].slice(0, 5); // Limit to 5 images
+
+                      handleChange("images", newImages);
+                      if (newImages.length > 0 && !form.image) {
+                        handleChange("image", newImages[0]);
+                      }
+                    } catch (error) {
+                      console.error("Upload error:", error);
+                      setError("Failed to upload images");
+                    } finally {
+                      setUploadingImages(false);
                     }
                   }}
                   style={{ padding: "0.5rem", borderRadius: "6px", border: "1px solid #ccc" }}
+                  disabled={uploadingImages}
                 />
-              ))}
+                {uploadingImages && <small style={{ color: "#666" }}>Uploading images...</small>}
+              </div>
+
+              {/* Current Images Display */}
+              {form.images && Array.isArray(form.images) && form.images.length > 0 && (
+                <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+                  <label style={{ fontSize: "0.8rem", color: "#666" }}>Current Images:</label>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
+                    {form.images.map((url, index) => (
+                      <div key={index} style={{ position: "relative", display: "inline-block" }}>
+                        <img
+                          src={url}
+                          alt={`Product ${index + 1}`}
+                          style={{ width: 60, height: 60, objectFit: "cover", borderRadius: "4px", border: "1px solid #ccc" }}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const newImages = form.images?.filter((_, i) => i !== index) || [];
+                            handleChange("images", newImages);
+                            if (newImages.length === 0) {
+                              handleChange("image", "");
+                            } else if (form.image === url) {
+                              handleChange("image", newImages[0]);
+                            }
+                          }}
+                          style={{
+                            position: "absolute",
+                            top: -5,
+                            right: -5,
+                            background: "#d33",
+                            color: "#fff",
+                            border: "none",
+                            borderRadius: "50%",
+                            width: 20,
+                            height: 20,
+                            cursor: "pointer",
+                            fontSize: "12px",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                          }}
+                        >
+                          ×
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Manual URL inputs as fallback */}
+              <details style={{ marginTop: "0.5rem" }}>
+                <summary style={{ cursor: "pointer", fontSize: "0.8rem", color: "#666" }}>
+                  Or enter image URLs manually
+                </summary>
+                <div style={{ marginTop: "0.5rem", display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+                  {[0, 1, 2, 3, 4].map((index) => (
+                    <input
+                      key={index}
+                      type="url"
+                      placeholder={`Image ${index + 1} URL`}
+                      value={form.images && Array.isArray(form.images) && form.images[index] ? form.images[index] : ""}
+                      onChange={(e) => {
+                        const newImages = [...(Array.isArray(form.images) ? form.images : [])];
+                        newImages[index] = e.target.value.trim();
+                        // Remove empty strings at the end
+                        while (newImages.length > 0 && !newImages[newImages.length - 1]) {
+                          newImages.pop();
+                        }
+                        handleChange("images", newImages);
+                        // Update the main image field with the first image
+                        if (newImages.length > 0 && newImages[0]) {
+                          handleChange("image", newImages[0]);
+                        } else {
+                          handleChange("image", "");
+                        }
+                      }}
+                      style={{ padding: "0.5rem", borderRadius: "6px", border: "1px solid #ccc" }}
+                    />
+                  ))}
+                </div>
+              </details>
             </div>
             <div style={{ display: "flex", gap: "1rem" }}>
               <button type="submit" style={{ flex: 1, padding: "0.5rem", borderRadius: "6px", border: "none", backgroundColor: "#2d5c4f", color: "#fff", cursor: "pointer" }}>
