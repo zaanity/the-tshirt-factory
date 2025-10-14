@@ -74,9 +74,13 @@ router.post("/images", requireAuth, upload.array("images", 5), async (req, res) 
       return res.status(400).json({ error: "No image files provided" });
     }
 
+    console.log("Starting upload for", req.files.length, "files");
+
     const uploadPromises = (req.files as Express.Multer.File[]).map(async (file) => {
       const fileName = `products/${Date.now()}-${file.originalname}`;
       const fileUpload = bucket.file(fileName);
+
+      console.log("Uploading file:", fileName);
 
       return new Promise<string>((resolve, reject) => {
         const stream = fileUpload.createWriteStream({
@@ -87,12 +91,13 @@ router.post("/images", requireAuth, upload.array("images", 5), async (req, res) 
         });
 
         stream.on("error", (err) => {
-          console.error("Upload error:", err);
+          console.error("Upload error for", fileName, ":", err);
           reject(err);
         });
 
         stream.on("finish", () => {
           const publicUrl = `https://storage.googleapis.com/${bucketName}/${fileName}`;
+          console.log("Upload successful for", fileName, ":", publicUrl);
           resolve(publicUrl);
         });
 
@@ -102,13 +107,15 @@ router.post("/images", requireAuth, upload.array("images", 5), async (req, res) 
 
     const urls = await Promise.all(uploadPromises);
 
+    console.log("All uploads completed, returning URLs:", urls);
+
     res.json({
       success: true,
       urls: urls,
     });
   } catch (error) {
     console.error("Upload error:", error);
-    res.status(500).json({ error: "Failed to upload images" });
+    res.status(500).json({ error: "Failed to upload images", details: error instanceof Error ? error.message : String(error) });
   }
 });
 
