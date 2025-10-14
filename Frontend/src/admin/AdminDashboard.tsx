@@ -2,7 +2,6 @@ import React from "react";
 import { useAuth } from "../hooks/useAuth";
 import ProductManager from "./ProductManager";
 import VisitorStats from "./VisitorStats";
-import ImageUploader from "./ImageUploader";
 import "./Admin.css";
 
 const AdminDashboard: React.FC = () => {
@@ -15,7 +14,6 @@ const AdminDashboard: React.FC = () => {
         <button onClick={logout}>Logout</button>
       </header>
       <main>
-        <ImageUploader />
         <ProductManager />
         <VisitorStats />
       </main>

@@ -454,19 +454,21 @@ export default function ProductManager() {
                           }}
                           style={{
                             position: "absolute",
-                            top: -5,
-                            right: -5,
+                            top: -8,
+                            right: -8,
                             background: "#d33",
                             color: "#fff",
                             border: "none",
                             borderRadius: "50%",
-                            width: 20,
-                            height: 20,
+                            width: 24,
+                            height: 24,
                             cursor: "pointer",
-                            fontSize: "12px",
+                            fontSize: "14px",
+                            lineHeight: 1,
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "center",
+                            zIndex: 1,
                           }}
                         >
                           ×
